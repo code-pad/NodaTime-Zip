@@ -10,8 +10,9 @@
   </PropertyGroup>
   <!-- Desktop-specific properties -->
   <PropertyGroup Condition="'$(Portability)' == 'Desktop'">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <!-- PCL-specific properties -->
   <PropertyGroup Condition="'$(Portability)' == 'PCL'">
@@ -39,6 +40,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +51,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\NodaTime.Serialization.JsonNet.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed Release|AnyCPU'">
     <OutputPath>bin\Signed Release\</OutputPath>
@@ -62,6 +65,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <AssemblyOriginatorKeyFile>..\..\NodaTime Release.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Portable|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -98,17 +102,15 @@
     <AssemblyOriginatorKeyFile>..\..\NodaTime Release.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Portability)' == 'Desktop'">
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\lib\jsonnet\Net35\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <ItemGroup Condition="'$(Portability)' == 'PCL'">
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\lib\jsonnet\Portable\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Release\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.XML" />
