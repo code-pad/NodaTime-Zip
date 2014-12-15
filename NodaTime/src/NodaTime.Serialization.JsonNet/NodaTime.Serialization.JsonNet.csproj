@@ -87,6 +87,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release Portable\NodaTime.Serialization.JsonNet.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed Release Portable|AnyCPU'">
     <OutputPath>bin\Signed Release Portable\</OutputPath>
@@ -109,6 +110,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Release\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Newtonsoft.Json\Src\Newtonsoft.Json\bin\Release\Net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />

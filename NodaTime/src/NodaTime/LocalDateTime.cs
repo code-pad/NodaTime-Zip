@@ -346,18 +346,7 @@ namespace NodaTime
         /// <summary>
         /// Gets the time portion of this local date and time as a <see cref="LocalTime"/>.
         /// </summary>
-        public LocalTime TimeOfDay
-        {
-            get
-            {
-                long ticks = localInstant.Ticks % NodaConstants.TicksPerStandardDay;
-                if (ticks < 0)
-                {
-                    ticks += NodaConstants.TicksPerStandardDay;
-                }
-                return new LocalTime(new LocalInstant(ticks));
-            }
-        }
+        public LocalTime TimeOfDay { get { return new LocalTime(TickOfDay); } }
 
         /// <summary>
         /// Gets the date portion of this local date and time as a <see cref="LocalDate"/> in the same calendar system as this value.
@@ -945,7 +934,7 @@ namespace NodaTime
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// The value of the current instance in the standard format pattern, using the current thread's
+        /// The value of the current instance in the default format pattern ("G"), using the current thread's
         /// culture to obtain a format provider.
         /// </returns>
         public override string ToString()
@@ -960,7 +949,7 @@ namespace NodaTime
         /// A <see cref="T:System.String" /> containing the value of the current instance in the specified format.
         /// </returns>
         /// <param name="patternText">The <see cref="T:System.String" /> specifying the pattern to use,
-        /// or null to use the default format pattern.
+        /// or null to use the default format pattern ("G").
         /// </param>
         /// <param name="formatProvider">The <see cref="T:System.IFormatProvider" /> to use when formatting the value,
         /// or null to use the current thread's culture to obtain a format provider.

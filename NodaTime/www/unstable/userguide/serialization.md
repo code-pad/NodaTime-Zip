@@ -68,6 +68,13 @@ When deserializing, the `XmlSerializer` will set the value of `PeriodBuilder` fr
 In an ideal world we'd also decorate the `PeriodBuilder` property with `[Obsolete("Only present for serialization", true)]` but unfortunately the XML serializer ignores obsolete
 properties, which would entirely defeat the point of the exercise.
 
+It's also worth noting that the XML serialization in .NET doesn't allow any user-defined types to be
+serialized via attributes. So while it would make perfect sense to be able to apply
+[`[XmlAttribute]`](http://msdn.microsoft.com/en-us/library/system.xml.serialization.xmlattributeattribute)
+to a particular property and have it serialized as an attribute, in reality you need to use
+[`[XmlElement]`](http://msdn.microsoft.com/en-us/library/system.xml.serialization.xmlelementattribute.aspx)
+instead. There's nothing Noda Time can do here; it's just a [limitation of .NET XML serialization](http://connect.microsoft.com/VisualStudio/feedback/details/277641/xmlattribute-xmltext-cannot-be-used-to-encode-types-implementing-ixmlserializable).
+
 Finally, serialization of `ZonedDateTime` comes with the tricky question of which `IDateTimeZoneProvider` to use in order to convert a time zone ID specified in the XML into a `DateTimeZone`.
 Noda Time has no concept of a "time zone provider registry" nor does a time zone "know" which provider it came from. Likewise XML serialization doesn't allow any particular local context to be
 specified as part of the deserialization process. As a horrible workaround, a static (thread-safe) `DateTimeZoneProviders.Serialization` property is used. This would normally be set on application start-up,
@@ -113,8 +120,8 @@ Most serialized forms just consist of element text using a specified text handli
     </tr>
     <tr>
       <td><code>OffsetDateTime</code></td>
-      <td>Extended ISO pattern, optional calendar</td>
-      <td><code>&lt;value calendar="Gregorian 3"&gt;16:45:20.1234567+01&lt;/value&gt;</td>
+      <td>RFC 3339 pattern (extended ISO but with offset in form +/-HH:mm or Z), optional calendar</td>
+      <td><code>&lt;value calendar="Gregorian 3"&gt;16:45:20.1234567+01:00&lt;/value&gt;</td>
     </tr>
     <tr>
       <td><code>ZonedDateTime</code></td>
@@ -202,7 +209,10 @@ All default patterns use the invariant culture.
 - `LocalDate`: ISO-8601 date pattern: `yyyy'-'MM'-'dd`
 - `LocalTime`: ISO-8601 time pattern, extended to handle fractional seconds: `HH':'mm':'ss.FFFFFFF`
 - `LocalDateTime`: ISO-8601 date/time pattern with no time zone specifier, extended to handle fractional seconds: `yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFF`
-- `OffsetDateTime`: ISO-8601 date/time with offset pattern: `yyyy'-'MM'-'dd'T'HH':'mm':'ss;FFFFFFFo<G>`
+- `OffsetDateTime`: RFC3339 pattern:
+ `yyyy'-'MM'-'dd'T'HH':'mm':'ss;FFFFFFFo<Z+HH:mm>`; note that the
+ offset always includes hours and minutes, to conform with ECMA-262.
+ It does not support round-tripping offsets with sub-minute components.
 - `ZonedDateTime`: As `OffsetDateTime`, but with a time zone ID at the end: `yyyy'-'MM'-'dd'T'HH':'mm':'ss;FFFFFFFo<G> z`
 - `Interval`: A compound object of the form `{ Start: xxx, End: yyy }` where `xxx` and `yyy` are represented however the serializer sees fit. (Typically using the default representation above.) An alternative form can be specified using the `WithIsoIntervalConverter` extension method on `JsonSerializer`/`JsonSerializerSettings`.
 - `Offset`: general pattern, e.g. `+05` or `-03:30`
